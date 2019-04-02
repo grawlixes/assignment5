@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,6 +30,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -287,6 +295,36 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
+
+            try {
+                URL url = new URL("https://cs.binghamton.edu/~kfranke1/" +
+                        "assignment5/login.php");
+                HttpURLConnection connect = (HttpURLConnection) url
+                        .openConnection();
+                connect.setReadTimeout(15000);
+                connect.setConnectTimeout(15000);
+                connect.setRequestMethod("POST");
+                connect.setDoInput(true);
+                connect.setDoOutput(true);
+
+                OutputStream os = connect.getOutputStream();
+                String s = "username=" + mEmail + "&password=" + mPassword;
+                os.write(s.getBytes());
+                os.close();
+
+                InputStream is = connect.getInputStream();
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                String line = br.readLine();
+                if (line.equals("Success")) {
+                    Log.d("Success", "success");
+                    return true;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+
 
             try {
                 // Simulate network access.
