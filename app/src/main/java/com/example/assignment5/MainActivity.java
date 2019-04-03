@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
                 // Get String data from Intent
                 username = data.getStringExtra("username");
 
+                // Now you have the username. Congrats.
                 Log.d("Username", username);
                 main();
             }

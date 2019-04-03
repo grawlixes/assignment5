@@ -325,16 +325,36 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
 
-
+            // TODO: register the new account here.
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+                URL url = new URL("https://cs.binghamton.edu/~kfranke1/" +
+                        "assignment5/create.php");
+                HttpURLConnection connect = (HttpURLConnection) url
+                        .openConnection();
+                connect.setReadTimeout(15000);
+                connect.setConnectTimeout(15000);
+                connect.setRequestMethod("POST");
+                connect.setDoInput(true);
+                connect.setDoOutput(true);
+
+                OutputStream os = connect.getOutputStream();
+                String s = "username=" + mEmail + "&password=" + mPassword;
+                os.write(s.getBytes());
+                os.close();
+
+                InputStream is = connect.getInputStream();
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                String line = br.readLine();
+                if (line.equals("Success")) {
+                    return true;
+                } else {
+                    return false;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
                 return false;
             }
-
-            // TODO: register the new account here.
-            return true;
         }
 
         @Override
