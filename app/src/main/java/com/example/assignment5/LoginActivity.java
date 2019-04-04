@@ -63,6 +63,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
 
+    private final String PATH = "https://cs.binghamton.edu/~kfranke1/assignment5/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -297,8 +299,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
 
             try {
-                URL url = new URL("https://cs.binghamton.edu/~kfranke1/" +
-                        "assignment5/login.php");
+                URL url = new URL(PATH + "login.php");
                 HttpURLConnection connect = (HttpURLConnection) url
                         .openConnection();
                 connect.setReadTimeout(15000);
@@ -327,8 +328,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             // TODO: register the new account here.
             try {
-                URL url = new URL("https://cs.binghamton.edu/~kfranke1/" +
-                        "assignment5/create.php");
+                URL url = new URL(PATH + "create.php");
                 HttpURLConnection connect = (HttpURLConnection) url
                         .openConnection();
                 connect.setReadTimeout(15000);
