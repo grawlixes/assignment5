@@ -47,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void main() {
+        ShowUsersAndPosts suap = new ShowUsersAndPosts();
+        Thread s = new Thread(suap);
+        s.start();
         /*
         MakePost mp = new MakePost(username, "I'm kyle duhhh");
         Thread t= new Thread(mp);
@@ -252,6 +255,35 @@ class Reaction implements Runnable {
     }
 }
 
+// For debugging.
+class ShowUsersAndPosts implements Runnable {
+
+    ShowUsersAndPosts() {}
+
+    public void run() {
+        try {
+            final String PATH = "https://cs.binghamton.edu/~kfranke1/assignment5/";
+            URL url = new URL(PATH + "get.php");
+            HttpURLConnection connect = (HttpURLConnection) url
+                    .openConnection();
+            connect.setReadTimeout(15000);
+            connect.setConnectTimeout(15000);
+            connect.setRequestMethod("POST");
+            connect.setDoOutput(true);
+
+            InputStream is = connect.getInputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            String data = br.readLine();
+            while (data != null) {
+                Log.d("ShowUsersAndPosts data:", data);
+                data = br.readLine();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
 // Post class.
 class Post {
 
@@ -261,7 +293,7 @@ class Post {
     private final int likes;
     private final int dislikes;
 
-    public Post(int id, String op, String post, int likes, int dislikes) {
+    Post(int id, String op, String post, int likes, int dislikes) {
         this.id = id;
         this.op = op;
         this.post = post;
