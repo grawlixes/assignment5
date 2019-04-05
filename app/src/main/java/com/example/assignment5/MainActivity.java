@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Pair;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -53,12 +52,16 @@ public class MainActivity extends AppCompatActivity {
         t.start();
         // Remember that getResult blocks the main thread automatically if you don't wait for
         // the database retrieval to be done. If you wait manually, you can do stuff while you wait.
-        ArrayList<Pair> userPostPairs = ret.getResult();
-        Log.d("Size", String.valueOf(userPostPairs.size()));
-        for (Pair p : userPostPairs) {
-            Log.d("op", (String) p.first);
-            Log.d("post text", (String) p.second);
+        ArrayList<Triplet> userPostTriplets = ret.getResult();
+        Log.d("Size", String.valueOf(userPostTriplets.size()));
+        for (Triplet p : userPostTriplets) {
+            Log.d("id", String.valueOf(p.getFirst()));
+            Log.d("op", (String) p.getSecond());
+            Log.d("post text", (String) p.getThird());
         }
+        Reaction r = new Reaction("4", "dislike");
+        Thread th = new Thread(r);
+        th.start();
     }
 }
 
@@ -102,7 +105,7 @@ class MakePost implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             String line = br.readLine();
             while (line != null) {
-                Log.d("Line", line);
+                Log.d("Response from post", line);
                 line = br.readLine();
             }
         } catch (Exception e) {
@@ -115,23 +118,23 @@ class MakePost implements Runnable {
 // Pretty much the same as above.
 
 // Here's how you retrieve new posts (the arraylist is
-// filled with pairs - first is the op, second is the post
-// text - every entry is a new post):
+// filled with Triplets - first is the id, second is the op,
+// and third is the post text - every entry is a new post):
 
 // RetrievePosts ret = new RetrievePosts();
 // Thread t = new Thread(ret)
 // t.start();
 /* either */
-//// ArrayList<Pair> userPostPairs = ret.getResult();
+//// ArrayList<Triplet> userPostTriplets = ret.getResult();
 /* OR */
 //// while (!ret.isDone()) { // do whatever you want in background, i.e. an animation }
-//// ArrayList<Pair> userPostPairs = ret.getResult();
+//// ArrayList<Triplet> userPostTriplets = ret.getResult();
 
 /* If you don't care about using the main thread while waiting, just do the first one. */
 class RetrievePosts implements Runnable {
 
     private boolean done;
-    private ArrayList<Pair> ret = new ArrayList<>();
+    private ArrayList<Triplet> ret = new ArrayList<>();
 
     RetrievePosts() {done = false;}
 
@@ -148,11 +151,13 @@ class RetrievePosts implements Runnable {
 
             InputStream is = connect.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            String id = br.readLine();
             String user = br.readLine();
             String post = br.readLine();
             while (user != null && post != null) {
-                Pair p = new Pair<>(user, post);
-                ret.add(p);
+                Triplet<String, String, String> t = new Triplet<>(id, user, post);
+                ret.add(t);
+                id = br.readLine();
                 user = br.readLine();
                 post = br.readLine();
             }
@@ -167,10 +172,84 @@ class RetrievePosts implements Runnable {
         return done;
     }
 
-    public ArrayList<Pair> getResult() {
+    public ArrayList<Triplet> getResult() {
         while (!done) {
             ;
         }
         return ret;
     }
+}
+
+// Like or dislike a post. Same story as above.
+// Here's how to use it:
+
+// Reaction react = new Reaction(int postId, String reaction);
+// Thread t = new Thread(ret);
+// t.start();
+/* if reaction is "dislike," you'll dislike it - otherwise, you'll like it */
+class Reaction implements Runnable {
+
+    private String postId;
+    // True if you're liking, false if you're disliking.
+    private boolean like;
+
+    Reaction(String postId, String reaction) {
+        if (reaction.equals("dislike")) {
+            like = false;
+        } else {
+            like = true;
+        }
+
+        this.postId = postId;
+    }
+
+    public void run() {
+        Log.d("Running reaction", "a");
+        try {
+            final String PATH = "https://cs.binghamton.edu/~kfranke1/assignment5/";
+            URL url = new URL(PATH + "react.php");
+            HttpURLConnection connect = (HttpURLConnection) url
+                    .openConnection();
+            connect.setReadTimeout(15000);
+            connect.setConnectTimeout(15000);
+            connect.setRequestMethod("POST");
+            connect.setDoOutput(true);
+
+            OutputStream os = connect.getOutputStream();
+            String s = "id=" + postId + "&reaction=" + ((like ? "y" : "n"));
+            os.write(s.getBytes());
+            os.close();
+
+            InputStream is = connect.getInputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            String line = br.readLine();
+            while (line != null) {
+                Log.d("Reaction response", line);
+                line = br.readLine();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+// TODO make this a quintuplet for likes and dislikes, too. Not sure how I forgot that.
+// Triplet class found on StackOverflow.
+// I just need it for retrieving posts because it's neater.
+// I use it to store post ids as 'first', ops as 'second', and post text as 'third'.
+class Triplet<T, U, V> {
+
+    private final T first;
+    private final U second;
+    private final V third;
+
+    public Triplet(T first, U second, V third) {
+        this.first = first;
+        this.second = second;
+        this.third = third;
+    }
+
+    public T getFirst() { return first; }
+    public U getSecond() { return second; }
+    public V getThird() { return third; }
 }
