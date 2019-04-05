@@ -1,9 +1,12 @@
 package com.example.assignment5;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -25,7 +28,36 @@ public class MainActivity extends AppCompatActivity {
         // Start the login activity
         Intent logInIntent = new Intent(this, LoginActivity.class);
         startActivityForResult(logInIntent, REQCODE);
+
+
+        FloatingActionButton post = findViewById(R.id.fabPost);
+        post.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                EditText postText = findViewById(R.id.postText);
+                MakePost mp = new MakePost(username, postText.getText().toString());
+                Thread t= new Thread(mp);
+                t.start();
+
+                postText.getText().clear();
+
+                RetrievePosts ret = new RetrievePosts();
+                Thread t2 = new Thread(ret);
+                t2.start();
+            }
+        });
+
+        FloatingActionButton refresh = findViewById(R.id.fabRefresh);
+        refresh.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                RetrievePosts ret = new RetrievePosts();
+                Thread t2 = new Thread(ret);
+                t2.start();
+            }
+        });
     }
+
 
     // This is called when the login or account creation succeeds
     @Override
