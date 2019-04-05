@@ -47,21 +47,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void main() {
-        RetrievePosts ret = new RetrievePosts();
-        Thread t = new Thread(ret);
+        /*
+        MakePost mp = new MakePost(username, "I'm kyle duhhh");
+        Thread t= new Thread(mp);
         t.start();
+
+        RetrievePosts ret = new RetrievePosts();
+        Thread t2 = new Thread(ret);
+        t2.start();
+
+        ArrayList<Post> pal = ret.getResult();
+        for (Post p : pal) {
+            Log.d("id+1", String.valueOf(p.getId()+1));
+            Log.d("op", p.getOp());
+            Log.d("post", p.getPost());
+            Log.d("likes+1", String.valueOf(p.getLikes()+1));
+            Log.d("dislikes+1", String.valueOf(p.getDislikes()+1));
+        }
         // Remember that getResult blocks the main thread automatically if you don't wait for
         // the database retrieval to be done. If you wait manually, you can do stuff while you wait.
-        ArrayList<Triplet> userPostTriplets = ret.getResult();
-        Log.d("Size", String.valueOf(userPostTriplets.size()));
-        for (Triplet p : userPostTriplets) {
-            Log.d("id", String.valueOf(p.getFirst()));
-            Log.d("op", (String) p.getSecond());
-            Log.d("post text", (String) p.getThird());
-        }
+
         Reaction r = new Reaction("4", "dislike");
         Thread th = new Thread(r);
-        th.start();
+        th.start(); */
     }
 }
 
@@ -118,23 +126,22 @@ class MakePost implements Runnable {
 // Pretty much the same as above.
 
 // Here's how you retrieve new posts (the arraylist is
-// filled with Triplets - first is the id, second is the op,
-// and third is the post text - every entry is a new post):
+// filled with Posts - every entry is a new post):
 
 // RetrievePosts ret = new RetrievePosts();
 // Thread t = new Thread(ret)
 // t.start();
 /* either */
-//// ArrayList<Triplet> userPostTriplets = ret.getResult();
+//// ArrayList<Post> newPosts = ret.getResult();
 /* OR */
 //// while (!ret.isDone()) { // do whatever you want in background, i.e. an animation }
-//// ArrayList<Triplet> userPostTriplets = ret.getResult();
+//// ArrayList<Post> newPosts = ret.getResult();
 
 /* If you don't care about using the main thread while waiting, just do the first one. */
 class RetrievePosts implements Runnable {
 
     private boolean done;
-    private ArrayList<Triplet> ret = new ArrayList<>();
+    private ArrayList<Post> ret = new ArrayList<>();
 
     RetrievePosts() {done = false;}
 
@@ -154,12 +161,22 @@ class RetrievePosts implements Runnable {
             String id = br.readLine();
             String user = br.readLine();
             String post = br.readLine();
+            String likes = br.readLine();
+            String dislikes = br.readLine();
             while (user != null && post != null) {
-                Triplet<String, String, String> t = new Triplet<>(id, user, post);
-                ret.add(t);
+                Log.d("Fn id", id);
+                Log.d("Fn user", user);
+                Log.d("Fn post", post);
+                Log.d("Fn likes", likes);
+                Log.d("Fn dislikes", dislikes);
+                Post p = new Post(Integer.parseInt(id), user, post, Integer.parseInt(likes),
+                                  Integer.parseInt(dislikes));
+                ret.add(p);
                 id = br.readLine();
                 user = br.readLine();
                 post = br.readLine();
+                likes = br.readLine();
+                dislikes = br.readLine();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -172,7 +189,7 @@ class RetrievePosts implements Runnable {
         return done;
     }
 
-    public ArrayList<Triplet> getResult() {
+    public ArrayList<Post> getResult() {
         while (!done) {
             ;
         }
@@ -195,8 +212,10 @@ class Reaction implements Runnable {
 
     Reaction(String postId, String reaction) {
         if (reaction.equals("dislike")) {
+            Log.d("Disliking", "d");
             like = false;
         } else {
+            Log.d("Liking", "d");
             like = true;
         }
 
@@ -233,23 +252,26 @@ class Reaction implements Runnable {
     }
 }
 
-// TODO make this a quintuplet for likes and dislikes, too. Not sure how I forgot that.
-// Triplet class found on StackOverflow.
-// I just need it for retrieving posts because it's neater.
-// I use it to store post ids as 'first', ops as 'second', and post text as 'third'.
-class Triplet<T, U, V> {
+// Post class.
+class Post {
 
-    private final T first;
-    private final U second;
-    private final V third;
+    private final int id;
+    private final String op;
+    private final String post;
+    private final int likes;
+    private final int dislikes;
 
-    public Triplet(T first, U second, V third) {
-        this.first = first;
-        this.second = second;
-        this.third = third;
+    public Post(int id, String op, String post, int likes, int dislikes) {
+        this.id = id;
+        this.op = op;
+        this.post = post;
+        this.likes = likes;
+        this.dislikes = dislikes;
     }
 
-    public T getFirst() { return first; }
-    public U getSecond() { return second; }
-    public V getThird() { return third; }
+    public int getId() { return id; }
+    public String getOp() { return op; }
+    public String getPost() { return post; }
+    public int getLikes() { return likes; }
+    public int getDislikes() { return dislikes; }
 }
