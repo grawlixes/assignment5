@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("RCRQ", String.valueOf(requestCode) + " " + String.valueOf(REQCODE));
         // Check that it is the SecondActivity with an OK result
         if (requestCode == REQCODE) {
             if (resultCode == RESULT_OK) {
@@ -39,18 +38,23 @@ public class MainActivity extends AppCompatActivity {
                 // Get String data from Intent
                 username = data.getStringExtra("username");
 
-                // Now you have the username. Congrats.
-                Log.d("Username", username);
+                RetrievePosts initial = new RetrievePosts();
+                Thread init = new Thread(initial);
+                init.start();
+
+                // Show the posts here.
+
                 main();
             }
         }
     }
 
     void main() {
+        /*
         ShowUsersAndPosts suap = new ShowUsersAndPosts();
         Thread s = new Thread(suap);
         s.start();
-        /*
+
         MakePost mp = new MakePost(username, "I'm kyle duhhh");
         Thread t= new Thread(mp);
         t.start();
@@ -72,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
 
         Reaction r = new Reaction("4", "dislike");
         Thread th = new Thread(r);
-        th.start(); */
+        th.start();
+        */
     }
 }
 
