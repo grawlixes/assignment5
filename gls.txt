@@ -1,0 +1,232 @@
+commit 4fa78fbb0e40d7a5ac08378f5b45125c8fb847e2
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Fri Apr 5 22:55:15 2019 -0400
+
+    Done!
+
+ README.md                                          |  26 +++-
+ Screenshot_1554519083.png                          | Bin 0 -> 94834 bytes
+ Screenshot_1554519162.png                          | Bin 0 -> 120533 bytes
+ Screenshot_1554519273.png                          | Bin 0 -> 139306 bytes
+ .../com/example/assignment5/LoginActivity.java     |   1 +
+ .../java/com/example/assignment5/MainActivity.java | 134 ++++++++++++++++++---
+ app/src/main/res/layout/activity_main.xml          |  15 +--
+ app/src/main/res/layout/content_main.xml           |  47 +++++---
+ app/src/main/res/values/colors.xml                 |   1 +
+ app/src/main/res/values/styles.xml                 |   6 +-
+ create.php                                         |  32 +++++
+ get.php                                            |  25 ++++
+ login.php                                          |  25 ++++
+ post.php                                           |  16 +++
+ react.php                                          |  20 +++
+ refresh.php                                        |  40 ++++++
+ 16 files changed, 335 insertions(+), 53 deletions(-)
+
+commit a638598bffd862e65f6d112ccb99fd9804cdbe79
+Merge: 9263088 1ad49bd
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Fri Apr 5 19:46:43 2019 -0400
+
+    Merge branch 'master' of https://github.com/grawlixes/assignment5
+
+commit 1ad49bd3522a23e35d7ae4c9e466f0f93359f0f5
+Author: Leandro Ribeiro <lribeir1@binghamton.edu>
+Date:   Fri Apr 5 19:46:30 2019 -0400
+
+    Finished xml layout
+
+ app/src/main/res/layout/content_main.xml | 134 ++++++++++++++++++++++++++++++-
+ 1 file changed, 133 insertions(+), 1 deletion(-)
+
+commit 9263088f349a1083f80463ab13fc9422e0247f5d
+Merge: 20bf5c5 9191324
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Fri Apr 5 19:15:42 2019 -0400
+
+    Merge branch 'master' of https://github.com/grawlixes/assignment5
+
+commit 20bf5c58c874f960b8eed5f8d09e19ba52bd8eff
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Fri Apr 5 19:15:33 2019 -0400
+
+    Stashinggit add -A! :(
+
+ .../java/com/example/assignment5/MainActivity.java     | 15 ++++++++++-----
+ app/src/main/res/layout/grid.xml                       | 18 ++++++++++++++++++
+ 2 files changed, 28 insertions(+), 5 deletions(-)
+
+commit 91913243275f1fef26ea15b1e248b5b2398866c3
+Author: Leandro Ribeiro <lribeir1@binghamton.edu>
+Date:   Fri Apr 5 19:15:06 2019 -0400
+
+    Added button functionality
+
+ .../java/com/example/assignment5/MainActivity.java | 32 ++++++++++++++++++++++
+ app/src/main/res/layout/activity_main.xml          | 10 ++++++-
+ app/src/main/res/layout/content_main.xml           | 22 +++++++++------
+ 3 files changed, 55 insertions(+), 9 deletions(-)
+
+commit fb2ac6f2d77ce630aee24c2b775343f731a0a267
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Fri Apr 5 17:36:23 2019 -0400
+
+    New activity and uhhhh
+
+ app/src/main/res/layout/activity_main.xml | 28 ++++++++++++++++++++++++++--
+ app/src/main/res/layout/content_main.xml  | 20 ++++++++++++++++++++
+ app/src/main/res/values/dimens.xml        |  1 +
+ app/src/main/res/values/styles.xml        |  9 +++++++++
+ 4 files changed, 56 insertions(+), 2 deletions(-)
+
+commit 213aad46c4fee570c1748b317e7e7f02126a043c
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Fri Apr 5 17:11:04 2019 -0400
+
+    Debug stuff.
+
+ .../java/com/example/assignment5/MainActivity.java | 34 +++++++++++++++++++++-
+ 1 file changed, 33 insertions(+), 1 deletion(-)
+
+commit e39d0884ae2aa981f564038713b1a3eb0eccfdab
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Fri Apr 5 10:06:00 2019 -0400
+
+    API is done I think. We're ready to actually code lol
+
+ .../java/com/example/assignment5/MainActivity.java | 88 ++++++++++++++--------
+ 1 file changed, 55 insertions(+), 33 deletions(-)
+
+commit 11ea8a21eb4ae1f1919eece570d9c4af7fe198e0
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Fri Apr 5 00:05:38 2019 -0400
+
+    Liking and disliking backend, also added id retrieval and triplet class
+
+ .../java/com/example/assignment5/MainActivity.java | 109 ++++++++++++++++++---
+ 1 file changed, 94 insertions(+), 15 deletions(-)
+
+commit 17adc2c9100431621474c9060b8e0dd5ff175743
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Thu Apr 4 13:58:01 2019 -0400
+
+    Retrieve post api done
+
+ .../com/example/assignment5/LoginActivity.java     |  8 +-
+ .../java/com/example/assignment5/MainActivity.java | 89 ++++++++++++++++++++--
+ 2 files changed, 85 insertions(+), 12 deletions(-)
+
+commit b0b9b75a6215856cc054fa2ac236a42bfae25a98
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Wed Apr 3 10:28:13 2019 -0400
+
+    Posting works
+
+ .../java/com/example/assignment5/MainActivity.java | 61 +++++++++++++++++++++-
+ 1 file changed, 60 insertions(+), 1 deletion(-)
+
+commit 50d5cb23ebc655ce4196d2c28a344ca5ab349374
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Wed Apr 3 00:00:29 2019 -0400
+
+    Login and registration is done and debugged
+
+ .../com/example/assignment5/LoginActivity.java     | 34 +++++++++++++++++-----
+ .../java/com/example/assignment5/MainActivity.java |  1 +
+ 2 files changed, 28 insertions(+), 7 deletions(-)
+
+commit b6f301a40d76bf04891ecdbd7db7ea5173c76765
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Tue Apr 2 14:47:50 2019 -0400
+
+    Internet permissions and login
+
+ app/src/main/AndroidManifest.xml                   |  2 ++
+ .../com/example/assignment5/LoginActivity.java     | 38 ++++++++++++++++++++++
+ 2 files changed, 40 insertions(+)
+
+commit cc86e8cf72a8bf582ceb54a514c24b901db26562
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Thu Mar 28 00:21:27 2019 -0400
+
+    Login activity and main activity - need to edit php files
+
+ .idea/misc.xml                                     |  2 +-
+ .idea/runConfigurations.xml                        | 12 ++++++
+ .idea/vcs.xml                                      |  6 +++
+ app/build.gradle                                   |  1 +
+ app/src/main/AndroidManifest.xml                   | 10 ++---
+ .../com/example/assignment5/LoginActivity.java     | 35 +++---------------
+ .../java/com/example/assignment5/MainActivity.java | 43 ++++++++++++++++++++++
+ app/src/main/res/layout/activity_main.xml          |  9 +++++
+ 8 files changed, 83 insertions(+), 35 deletions(-)
+
+commit d86d48a347a2438a46f579d2513e8388b48f420c
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Wed Mar 27 09:39:33 2019 -0400
+
+    Changed to login activity
+
+ .idea/misc.xml                                     |   2 +-
+ .idea/runConfigurations.xml                        |  12 -
+ README.md                                          |   0
+ app/build.gradle                                   |   2 +-
+ app/src/main/AndroidManifest.xml                   |  13 +-
+ .../com/example/assignment5/LoginActivity.java     | 348 +++++++++++++++++++++
+ .../java/com/example/assignment5/MainActivity.java |  13 -
+ .../res/drawable-v24/ic_launcher_foreground.xml    |  12 +-
+ .../main/res/drawable/ic_launcher_background.xml   | 236 +++++---------
+ app/src/main/res/layout/activity_login.xml         |  78 +++++
+ app/src/main/res/layout/activity_main.xml          |  18 --
+ app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml |   4 +-
+ .../res/mipmap-anydpi-v26/ic_launcher_round.xml    |   4 +-
+ app/src/main/res/values/dimens.xml                 |   5 +
+ app/src/main/res/values/strings.xml                |  12 +
+ gradle.properties                                  |   4 +
+ gradle/wrapper/gradle-wrapper.properties           |   2 +-
+ 17 files changed, 540 insertions(+), 225 deletions(-)
+
+commit 8b69ba33d68adb8c999b0f017348b49f3c4aa239
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Fri Mar 22 13:00:19 2019 -0400
+
+    Initial commit - empty activity
+
+ .gitignore                                         |  13 ++
+ .idea/codeStyles/Project.xml                       |  29 ++++
+ .idea/gradle.xml                                   |  15 ++
+ .idea/misc.xml                                     |   9 ++
+ .idea/runConfigurations.xml                        |  12 ++
+ README.md                                          |   1 +
+ app/.gitignore                                     |   1 +
+ app/build.gradle                                   |  28 ++++
+ app/proguard-rules.pro                             |  21 +++
+ .../assignment5/ExampleInstrumentedTest.java       |  26 ++++
+ app/src/main/AndroidManifest.xml                   |  21 +++
+ .../java/com/example/assignment5/MainActivity.java |  13 ++
+ .../res/drawable-v24/ic_launcher_foreground.xml    |  34 ++++
+ .../main/res/drawable/ic_launcher_background.xml   | 170 ++++++++++++++++++++
+ app/src/main/res/layout/activity_main.xml          |  18 +++
+ app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml |   5 +
+ .../res/mipmap-anydpi-v26/ic_launcher_round.xml    |   5 +
+ app/src/main/res/mipmap-hdpi/ic_launcher.png       | Bin 0 -> 2963 bytes
+ app/src/main/res/mipmap-hdpi/ic_launcher_round.png | Bin 0 -> 4905 bytes
+ app/src/main/res/mipmap-mdpi/ic_launcher.png       | Bin 0 -> 2060 bytes
+ app/src/main/res/mipmap-mdpi/ic_launcher_round.png | Bin 0 -> 2783 bytes
+ app/src/main/res/mipmap-xhdpi/ic_launcher.png      | Bin 0 -> 4490 bytes
+ .../main/res/mipmap-xhdpi/ic_launcher_round.png    | Bin 0 -> 6895 bytes
+ app/src/main/res/mipmap-xxhdpi/ic_launcher.png     | Bin 0 -> 6387 bytes
+ .../main/res/mipmap-xxhdpi/ic_launcher_round.png   | Bin 0 -> 10413 bytes
+ app/src/main/res/mipmap-xxxhdpi/ic_launcher.png    | Bin 0 -> 9128 bytes
+ .../main/res/mipmap-xxxhdpi/ic_launcher_round.png  | Bin 0 -> 15132 bytes
+ app/src/main/res/values/colors.xml                 |   6 +
+ app/src/main/res/values/strings.xml                |   3 +
+ app/src/main/res/values/styles.xml                 |  11 ++
+ .../com/example/assignment5/ExampleUnitTest.java   |  17 ++
+ build.gradle                                       |  27 ++++
+ gradle.properties                                  |  15 ++
+ gradle/wrapper/gradle-wrapper.jar                  | Bin 0 -> 54329 bytes
+ gradle/wrapper/gradle-wrapper.properties           |   6 +
+ gradlew                                            | 172 +++++++++++++++++++++
+ gradlew.bat                                        |  84 ++++++++++
+ settings.gradle                                    |   1 +
+ 38 files changed, 763 insertions(+)
