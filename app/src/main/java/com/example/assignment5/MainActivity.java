@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -26,6 +27,16 @@ public class MainActivity extends AppCompatActivity {
     private String username;
     private ArrayList<Slot> slots = new ArrayList<>();
 
+    private ListView lv;
+    String  Item[] = {"Apple", "Banana", "Lemon", "Cherry", "Strawberry", "Avocado"};
+    String  SubItem[] = {"The apple tree is a deciduous tree in the rose family best known for its sweet, pomaceous fruit, the apple.",
+            "The banana is an edible fruit – botanically a berry – produced by several kinds of large herbaceous flowering plants in the genus Musa.",
+            "The lemon, Citrus limon Osbeck, is a species of small evergreen tree in the flowering plant family Rutaceae, native to Asia.",
+            "A cherry is the fruit of many plants of the genus Prunus, and is a fleshy drupe.",
+            "The garden strawberry is a widely grown hybrid species of the genus Fragaria, collectively known as the strawberries.",
+            "The avocado is a tree, long thought to have originated in South Central Mexico, classified as a member of the flowering plant family Lauraceae."};
+    int flags[] = {R.drawable.wack, R.drawable.wack, R.drawable.wack, R.drawable.wack, R.drawable.wack, R.drawable.wack};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,13 +46,19 @@ public class MainActivity extends AppCompatActivity {
         Intent logInIntent = new Intent(this, LoginActivity.class);
         startActivityForResult(logInIntent, REQCODE);
 
+        lv = findViewById(R.id.postView);
+        CustomAdapter customAdapter = new CustomAdapter(getApplicationContext(), Item,SubItem, flags);
+        lv.setAdapter(customAdapter);
+
+        // TODO change this
+        /*
         slots.add(new Slot(0, (TextView) findViewById(R.id.op1), (TextView) findViewById(R.id.post1),
                            (Button) findViewById(R.id.like1), (Button) findViewById(R.id.dislike1)));
         slots.add(new Slot(0, (TextView) findViewById(R.id.op2), (TextView) findViewById(R.id.post2),
                 (Button) findViewById(R.id.like2), (Button) findViewById(R.id.dislike2)));
         slots.add(new Slot(0, (TextView) findViewById(R.id.op3), (TextView) findViewById(R.id.post3),
                 (Button) findViewById(R.id.like3), (Button) findViewById(R.id.dislike3)));
-
+        */
         FloatingActionButton post = findViewById(R.id.fabPost);
         post.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -134,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 username = data.getStringExtra("username");
 
                 // Show the posts here.
-                set(slots);
+                // set(slots);
 
                 main();
             }
