@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,14 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Slot> slots = new ArrayList<>();
 
     private ListView lv;
-    String  Item[] = {"Apple", "Banana", "Lemon", "Cherry", "Strawberry", "Avocado"};
-    String  SubItem[] = {"The apple tree is a deciduous tree in the rose family best known for its sweet, pomaceous fruit, the apple.",
-            "The banana is an edible fruit – botanically a berry – produced by several kinds of large herbaceous flowering plants in the genus Musa.",
-            "The lemon, Citrus limon Osbeck, is a species of small evergreen tree in the flowering plant family Rutaceae, native to Asia.",
-            "A cherry is the fruit of many plants of the genus Prunus, and is a fleshy drupe.",
-            "The garden strawberry is a widely grown hybrid species of the genus Fragaria, collectively known as the strawberries.",
-            "The avocado is a tree, long thought to have originated in South Central Mexico, classified as a member of the flowering plant family Lauraceae."};
-    int flags[] = {R.drawable.wack, R.drawable.wack, R.drawable.wack, R.drawable.wack, R.drawable.wack, R.drawable.wack};
+    private CustomAdapter ca;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +39,6 @@ public class MainActivity extends AppCompatActivity {
         // Start the login activity
         Intent logInIntent = new Intent(this, LoginActivity.class);
         startActivityForResult(logInIntent, REQCODE);
-
-        lv = findViewById(R.id.postView);
-        CustomAdapter customAdapter = new CustomAdapter(getApplicationContext(), Item,SubItem, flags);
-        lv.setAdapter(customAdapter);
 
         // TODO change this
         /*
@@ -74,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                set(slots);
+                set(slots, false);
             }
         });
 
@@ -82,61 +72,43 @@ public class MainActivity extends AppCompatActivity {
         refresh.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                set(slots);
+                set(slots, false);
             }
         });
     }
 
-    void set(ArrayList<Slot> slots) {
+    void set(ArrayList<Slot> slots, boolean first) {
         RetrievePosts ret = new RetrievePosts();
         Thread t2 = new Thread(ret);
         t2.start();
         Log.d("Waiting for posts", "p");
         ArrayList<Post> newPosts = ret.getResult();
-        Log.d("DONE for posts", "p");
+        Log.d("DONE for posts", String.valueOf(newPosts.size()));
+        String[] ops = new String[newPosts.size()];
+        String[] posts = new String[newPosts.size()];
+        int[] likes = new int[newPosts.size()];
+        int[] dislikes = new int[newPosts.size()];
+        String[] avatars = new String[newPosts.size()];
 
         for (int i = 0; i < newPosts.size(); i++) {
-            final Slot s = slots.get(i);
-            final Post p = newPosts.get(i);
-            s.setId(p.getId());
-            s.getOp().setVisibility(View.VISIBLE);
-            s.getOp().setPaintFlags(s.getOp().getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-            s.getPost().setVisibility(View.VISIBLE);
-            s.getLike().setVisibility(View.VISIBLE);
-            s.getDislike().setVisibility(View.VISIBLE);
-            s.getOp().setText(p.getOp());
-            s.getPost().setText(p.getPost());
-            s.getLike().setText(String.valueOf(p.getLikes()));
-            s.getLike().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Reaction r = new Reaction(String.valueOf(p.getId()), "like");
-                    Thread rt = new Thread(r);
-                    rt.start();
-                    p.addLike();
-                    s.getLike().setText(String.valueOf(p.getLikes()));
-                }
-            });
-            s.getDislike().setText(String.valueOf(p.getDislikes()));
-            s.getDislike().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Reaction r = new Reaction(String.valueOf(p.getId()), "dislike");
-                    Thread rt = new Thread(r);
-                    rt.start();
-                    p.addDislike();
-                    s.getDislike().setText(String.valueOf(p.getDislikes()));
-                }
-            });
+            ops[i] = (newPosts.get(i).getOp());
+            posts[i] = (newPosts.get(i).getPost());
+            likes[i] = (newPosts.get(i).getLikes());
+            dislikes[i] = (newPosts.get(i).getDislikes());
+            avatars[i] = (newPosts.get(i).getAvatar());
         }
 
-        for (int i = newPosts.size(); i < 3; i++) {
-            Slot s = slots.get(i);
-            s.getOp().setVisibility(View.INVISIBLE);
-            s.getPost().setVisibility(View.INVISIBLE);
-            s.getLike().setVisibility(View.INVISIBLE);
-            s.getDislike().setVisibility(View.INVISIBLE);
+        Log.d("O", ops[0]);
+        Log.d("P", posts[0]);
+        Log.d("A", avatars[0]);
+        if (first) {
+            lv = findViewById(R.id.postView);
+            ca = new CustomAdapter(getApplicationContext(), ops, posts, likes, dislikes, avatars);
+            lv.setAdapter(ca);
+        } else {
+            ca.refresh(ops, posts, likes, dislikes, avatars);
         }
+
     }
 
     // This is called when the login or account creation succeeds
@@ -150,8 +122,8 @@ public class MainActivity extends AppCompatActivity {
                 // Get String data from Intent
                 username = data.getStringExtra("username");
 
-                // Show the posts here.
-                // set(slots);
+                // Show the posts here for the first time.
+                set(slots, true);
 
                 main();
             }
@@ -286,20 +258,23 @@ class RetrievePosts implements Runnable {
             String post = br.readLine();
             String likes = br.readLine();
             String dislikes = br.readLine();
+            String avatar = br.readLine();
             while (user != null && post != null) {
                 Log.d("Fn id", id);
                 Log.d("Fn user", user);
                 Log.d("Fn post", post);
                 Log.d("Fn likes", likes);
                 Log.d("Fn dislikes", dislikes);
+                Log.d("Fn avatar", avatar);
                 Post p = new Post(Integer.parseInt(id), user, post, Integer.parseInt(likes),
-                                  Integer.parseInt(dislikes));
+                                  Integer.parseInt(dislikes), avatar);
                 ret.add(p);
                 id = br.readLine();
                 user = br.readLine();
                 post = br.readLine();
                 likes = br.readLine();
                 dislikes = br.readLine();
+                avatar = br.readLine();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -414,13 +389,15 @@ class Post {
     private String post;
     private int likes;
     private int dislikes;
+    private String avatar;
 
-    Post(int id, String op, String post, int likes, int dislikes) {
+    Post(int id, String op, String post, int likes, int dislikes, String avatar) {
         this.id = id;
         this.op = op;
         this.post = post;
         this.likes = likes;
         this.dislikes = dislikes;
+        this.avatar = avatar;
     }
 
     public int getId() { return id; }
@@ -430,22 +407,27 @@ class Post {
     public void addLike() { likes++; }
     public int getDislikes() { return dislikes; }
     public void addDislike() { dislikes++; }
+    public String getAvatar() { return avatar; }
 }
 
-// Slot class.
+// Slot class for posts.
 class Slot {
     private int id;
     private TextView op;
     private TextView post;
     private Button like;
     private Button dislike;
+    private ImageView avatar;
 
-    Slot(int id, TextView op, TextView post, Button like, Button dislike) {
+    Slot() {}
+
+    Slot(int id, TextView op, TextView post, Button like, Button dislike, ImageView avatar) {
         this.id = id;
         this.op = op;
         this.post = post;
         this.like = like;
         this.dislike = dislike;
+        this.avatar = avatar;
     }
 
     public void setId(int id) { this.id = id; }
@@ -454,4 +436,5 @@ class Slot {
     public TextView getPost() { return post; }
     public Button getLike() { return like; }
     public Button getDislike() { return dislike; }
+    public ImageView getAvatar() { return avatar; }
 }
