@@ -28,17 +28,19 @@ public class CustomAdapter extends BaseAdapter {
     private String ops[];
     private Button buttons[];
     private String posts[];
+    private int types[];
     private int likes[];
     private int dislikes[];
     private String avatars[];
     private LayoutInflater inflter;
 
     CustomAdapter(Context applicationContext, String username, String[] ops,
-                         String[] posts, int[] likes, int[] dislikes, String[] avatars) {
+                         String[] posts, int[] types, int[] likes, int[] dislikes, String[] avatars) {
         this.context = applicationContext;
         this.username = username;
         this.ops = ops;
         this.posts = posts;
+        this.types = types;
         this.likes = likes;
         this.dislikes = dislikes;
         this.avatars = avatars;
@@ -46,11 +48,12 @@ public class CustomAdapter extends BaseAdapter {
         inflter = (LayoutInflater.from(applicationContext));
     }
 
-    void refresh(String[] ops, String[] posts, int[] likes, int[] dislikes,
+    void refresh(String[] ops, String[] posts, int[] types, int[] likes, int[] dislikes,
                         String[] avatars) {
         this.ops = ops;
         this.posts = posts;
         this.likes = likes;
+        this.types = types;
         this.dislikes = dislikes;
         this.avatars = avatars;
 
@@ -74,9 +77,16 @@ public class CustomAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
-        view = inflter.inflate(R.layout.activity_list_item, null);
+        if (types[i] == 0) {
+            view = inflter.inflate(R.layout.activity_list_item, null);
+            TextView post = (TextView) view.findViewById(R.id.post);
+            post.setText(posts[i]);
+        } else {
+            view = inflter.inflate(R.layout.activity_list_image, null);
+            ImageView post = (ImageView) view.findViewById(R.id.post);
+            Picasso.get().load(posts[i]).into(post);
+        }
         final Button op = (Button) view.findViewById(R.id.op);
-        TextView post = (TextView) view.findViewById(R.id.post);
         ImageView image = (ImageView) view.findViewById(R.id.image);
         op.setText(ops[i]);
         op.setOnClickListener(new View.OnClickListener(){
@@ -97,7 +107,7 @@ public class CustomAdapter extends BaseAdapter {
                 context.startActivity(intent);
             }
         });
-        post.setText(posts[i]);
+
         // Module by Square which allows loading images on the fly. Useful!
         if (avatars[i].length() > 0) {
             Picasso.get().load(avatars[i]).into(image);

@@ -1,5 +1,6 @@
 package com.example.assignment5;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -37,7 +38,6 @@ public class EditProfileActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO save changes
                 EditText editAvatar = findViewById(R.id.avatarEdit);
                 EditText editBio = findViewById(R.id.bioEdit);
 
@@ -48,6 +48,10 @@ public class EditProfileActivity extends AppCompatActivity {
                 Thread t = new Thread(uu);
                 t.start();
 
+                Intent done = new Intent();
+                done.putExtra("avatar", newAvatar);
+                done.putExtra("bio", newBio);
+                setResult(RESULT_OK, done);
                 finish();
             }
         });

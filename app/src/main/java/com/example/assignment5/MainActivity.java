@@ -1,12 +1,10 @@
 package com.example.assignment5;
 
 import android.content.Intent;
-import android.graphics.Paint;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,8 +43,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 EditText postText = findViewById(R.id.postText);
-                MakePost mp = new MakePost(username, postText.getText().toString());
-                Thread t= new Thread(mp);
+                String post = postText.getText().toString();
+                // Decide the type of post. If it's a png or jpg, it's an image; otherwise, it's not.
+                // Type 0 means regular post, type 1 means image post.
+                int type = (post.length() < 4 || !(post.substring(post.length()-4).equals(".jpg") ||
+                                                    post.substring(post.length()-4).equals(".png")))
+                            ? 0 : 1;
+                Log.d("Type is", String.valueOf(type));
+                Log.d("Type back", post.substring(post.length()-4));
+                MakePost mp = new MakePost(username, postText.getText().toString(), type);
+                Thread t = new Thread(mp);
                 t.start();
 
                 postText.getText().clear();
@@ -77,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("DONE for posts", String.valueOf(newPosts.size()));
         String[] ops = new String[newPosts.size()];
         String[] posts = new String[newPosts.size()];
+        int[] types = new int[newPosts.size()];
         int[] likes = new int[newPosts.size()];
         int[] dislikes = new int[newPosts.size()];
         String[] avatars = new String[newPosts.size()];
@@ -84,20 +91,18 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < newPosts.size(); i++) {
             ops[i] = (newPosts.get(i).getOp());
             posts[i] = (newPosts.get(i).getPost());
+            types[i] = (newPosts.get(i).getType());
             likes[i] = (newPosts.get(i).getLikes());
             dislikes[i] = (newPosts.get(i).getDislikes());
             avatars[i] = (newPosts.get(i).getAvatar());
         }
 
-        Log.d("O", ops[0]);
-        Log.d("P", posts[0]);
-        Log.d("A", avatars[0]);
         if (first) {
             lv = findViewById(R.id.postView);
-            ca = new CustomAdapter(getApplicationContext(), username, ops, posts, likes, dislikes, avatars);
+            ca = new CustomAdapter(getApplicationContext(), username, ops, posts, types, likes, dislikes, avatars);
             lv.setAdapter(ca);
         } else {
-            ca.refresh(ops, posts, likes, dislikes, avatars);
+            ca.refresh(ops, posts, types, likes, dislikes, avatars);
         }
     }
 
@@ -114,41 +119,8 @@ public class MainActivity extends AppCompatActivity {
 
                 // Show the posts here for the first time.
                 set(true);
-
-                main();
             }
         }
-    }
-
-    void main() {
-        /*
-        ShowUsersAndPosts suap = new ShowUsersAndPosts();
-        Thread s = new Thread(suap);
-        s.start();
-
-        MakePost mp = new MakePost(username, "I'm kyle duhhh");
-        Thread t= new Thread(mp);
-        t.start();
-
-        RetrievePosts ret = new RetrievePosts();
-        Thread t2 = new Thread(ret);
-        t2.start();
-
-        ArrayList<Post> pal = ret.getResult();
-        for (Post p : pal) {
-            Log.d("id+1", String.valueOf(p.getId()+1));
-            Log.d("op", p.getOp());
-            Log.d("post", p.getPost());
-            Log.d("likes+1", String.valueOf(p.getLikes()+1));
-            Log.d("dislikes+1", String.valueOf(p.getDislikes()+1));
-        }
-        // Remember that getResult blocks the main thread automatically if you don't wait for
-        // the database retrieval to be done. If you wait manually, you can do stuff while you wait.
-
-        Reaction r = new Reaction("4", "dislike");
-        Thread th = new Thread(r);
-        th.start();
-        */
     }
 
     void react(int postId, String reaction) {
@@ -171,10 +143,12 @@ class MakePost implements Runnable {
 
     private String op;
     private String post;
+    private int type;
 
-    MakePost(String op, String post) {
+    MakePost(String op, String post, int type) {
         this.op = op;
         this.post = post;
+        this.type = type;
     }
 
     public void run() {
@@ -190,7 +164,7 @@ class MakePost implements Runnable {
             connect.setDoOutput(true);
 
             OutputStream os = connect.getOutputStream();
-            String s = "username=" + op + "&post=" + post;
+            String s = "username=" + op + "&post=" + post + "&type=" + String.valueOf(type);
             os.write(s.getBytes());
             os.close();
 
@@ -244,6 +218,7 @@ class RetrievePosts implements Runnable {
             InputStream is = connect.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             String id = br.readLine();
+            String type = br.readLine();
             String user = br.readLine();
             String post = br.readLine();
             String likes = br.readLine();
@@ -251,15 +226,18 @@ class RetrievePosts implements Runnable {
             String avatar = br.readLine();
             while (user != null && post != null) {
                 Log.d("Fn id", id);
+                Log.d("Fn type", type);
                 Log.d("Fn user", user);
                 Log.d("Fn post", post);
                 Log.d("Fn likes", likes);
                 Log.d("Fn dislikes", dislikes);
                 Log.d("Fn avatar", avatar);
-                Post p = new Post(Integer.parseInt(id), user, post, Integer.parseInt(likes),
+                Post p = new Post(Integer.parseInt(id), Integer.parseInt(type), user, post,
+                                  Integer.parseInt(likes),
                                   Integer.parseInt(dislikes), avatar);
                 ret.add(p);
                 id = br.readLine();
+                type = br.readLine();
                 user = br.readLine();
                 post = br.readLine();
                 likes = br.readLine();
@@ -313,7 +291,6 @@ class Reaction implements Runnable {
     }
 
     public void run() {
-        Log.d("Running reaction", "a");
         try {
             final String PATH = "https://cs.binghamton.edu/~kfranke1/assignment5/";
             URL url = new URL(PATH + "react.php");
@@ -375,14 +352,16 @@ class ShowUsersAndPosts implements Runnable {
 class Post {
 
     private int id;
+    private int type;
     private String op;
     private String post;
     private int likes;
     private int dislikes;
     private String avatar;
 
-    Post(int id, String op, String post, int likes, int dislikes, String avatar) {
+    Post(int id, int type, String op, String post, int likes, int dislikes, String avatar) {
         this.id = id;
+        this.type = type;
         this.op = op;
         this.post = post;
         this.likes = likes;
@@ -391,6 +370,7 @@ class Post {
     }
 
     public int getId() { return id; }
+    public int getType() { return type; }
     public String getOp() { return op; }
     public String getPost() { return post; }
     public int getLikes() { return likes; }

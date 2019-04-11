@@ -51,7 +51,7 @@ public class ProfileActivity extends AppCompatActivity {
                 // TODO: Edit profile stuff here. Can just be two EditTexts for image url and bio.
                 Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
                 intent.putExtra("username", username);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
         if (!clicker.equals(username)) {
@@ -89,12 +89,14 @@ public class ProfileActivity extends AppCompatActivity {
         Log.d("DONE for posts", String.valueOf(newPosts.size()));
         String[] ops = new String[newPosts.size()];
         String[] posts = new String[newPosts.size()];
+        int[] types = new int[newPosts.size()];
         int[] likes = new int[newPosts.size()];
         int[] dislikes = new int[newPosts.size()];
         String[] avatars = new String[newPosts.size()];
 
         for (int i = 0; i < newPosts.size(); i++) {
             ops[i] = (newPosts.get(i).getOp());
+            types[i] = (newPosts.get(i).getType());
             posts[i] = (newPosts.get(i).getPost());
             likes[i] = (newPosts.get(i).getLikes());
             dislikes[i] = (newPosts.get(i).getDislikes());
@@ -103,11 +105,27 @@ public class ProfileActivity extends AppCompatActivity {
 
         if (first) {
             lv = findViewById(R.id.postView);
-            ca = new CustomAdapter(getApplicationContext(), clicker, ops, posts, likes, dislikes, avatars);
+            ca = new CustomAdapter(getApplicationContext(), clicker, ops, posts, types, likes, dislikes, avatars);
             lv.setAdapter(ca);
         } else {
-            ca.refresh(ops, posts, likes, dislikes, avatars);
+            ca.refresh(ops, posts, types, likes, dislikes, avatars);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ImageView avatar = findViewById(R.id.avatar);
+        TextView bio = findViewById(R.id.bio);
+
+        String avatarPath = data.getStringExtra("avatar");
+        String newBio = data.getStringExtra("bio");
+        if (avatarPath.length() > 0) {
+            Picasso.get().load(avatarPath).into(avatar);
+        }
+
+        bio.setText(newBio);
+        set(false);
     }
 }
 
@@ -158,6 +176,7 @@ class RetrieveMyPosts implements Runnable {
             InputStream is = connect.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             String id = br.readLine();
+            String type = br.readLine();
             String user = br.readLine();
             String post = br.readLine();
             String likes = br.readLine();
@@ -165,15 +184,17 @@ class RetrieveMyPosts implements Runnable {
             String avatar = br.readLine();
             while (user != null && post != null) {
                 Log.d("Fn id", id);
+                Log.d("Fn type", type);
                 Log.d("Fn user", user);
                 Log.d("Fn post", post);
                 Log.d("Fn likes", likes);
                 Log.d("Fn dislikes", dislikes);
                 Log.d("Fn avatar", avatar);
-                Post p = new Post(Integer.parseInt(id), user, post, Integer.parseInt(likes),
+                Post p = new Post(Integer.parseInt(id), Integer.parseInt(type), user, post, Integer.parseInt(likes),
                         Integer.parseInt(dislikes), avatar);
                 ret.add(p);
                 id = br.readLine();
+                type = br.readLine();
                 user = br.readLine();
                 post = br.readLine();
                 likes = br.readLine();
