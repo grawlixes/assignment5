@@ -44,15 +44,18 @@ public class ProfileActivity extends AppCompatActivity {
         bio = getIntent().getStringExtra("bio");
         set(true);
 
-        FloatingActionButton fab = findViewById(R.id.editProfile);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton edit = findViewById(R.id.editProfile);
+        edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // TODO: Edit profile stuff here. Can just be two EditTexts for image url and bio.
+                Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+                intent.putExtra("username", username);
+                startActivity(intent);
             }
         });
         if (!clicker.equals(username)) {
-            fab.hide();
+            edit.hide();
         }
 
         FloatingActionButton back = findViewById(R.id.returnButton);
