@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,7 +27,6 @@ import static java.lang.Thread.sleep;
 public class MainActivity extends AppCompatActivity {
     private static final int REQCODE = 0;
     private String username;
-    private ArrayList<Slot> slots = new ArrayList<>();
 
     private ListView lv;
     private CustomAdapter ca;
@@ -40,15 +40,6 @@ public class MainActivity extends AppCompatActivity {
         Intent logInIntent = new Intent(this, LoginActivity.class);
         startActivityForResult(logInIntent, REQCODE);
 
-        // TODO change this
-        /*
-        slots.add(new Slot(0, (TextView) findViewById(R.id.op1), (TextView) findViewById(R.id.post1),
-                           (Button) findViewById(R.id.like1), (Button) findViewById(R.id.dislike1)));
-        slots.add(new Slot(0, (TextView) findViewById(R.id.op2), (TextView) findViewById(R.id.post2),
-                (Button) findViewById(R.id.like2), (Button) findViewById(R.id.dislike2)));
-        slots.add(new Slot(0, (TextView) findViewById(R.id.op3), (TextView) findViewById(R.id.post3),
-                (Button) findViewById(R.id.like3), (Button) findViewById(R.id.dislike3)));
-        */
         FloatingActionButton post = findViewById(R.id.fabPost);
         post.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -64,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                set(slots, false);
+                set(false);
             }
         });
 
@@ -72,12 +63,12 @@ public class MainActivity extends AppCompatActivity {
         refresh.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                set(slots, false);
+                set(false);
             }
         });
     }
 
-    void set(ArrayList<Slot> slots, boolean first) {
+    void set(boolean first) {
         RetrievePosts ret = new RetrievePosts();
         Thread t2 = new Thread(ret);
         t2.start();
@@ -103,12 +94,11 @@ public class MainActivity extends AppCompatActivity {
         Log.d("A", avatars[0]);
         if (first) {
             lv = findViewById(R.id.postView);
-            ca = new CustomAdapter(getApplicationContext(), ops, posts, likes, dislikes, avatars);
+            ca = new CustomAdapter(getApplicationContext(), username, ops, posts, likes, dislikes, avatars);
             lv.setAdapter(ca);
         } else {
             ca.refresh(ops, posts, likes, dislikes, avatars);
         }
-
     }
 
     // This is called when the login or account creation succeeds
@@ -123,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 username = data.getStringExtra("username");
 
                 // Show the posts here for the first time.
-                set(slots, true);
+                set(true);
 
                 main();
             }
@@ -408,33 +398,4 @@ class Post {
     public int getDislikes() { return dislikes; }
     public void addDislike() { dislikes++; }
     public String getAvatar() { return avatar; }
-}
-
-// Slot class for posts.
-class Slot {
-    private int id;
-    private TextView op;
-    private TextView post;
-    private Button like;
-    private Button dislike;
-    private ImageView avatar;
-
-    Slot() {}
-
-    Slot(int id, TextView op, TextView post, Button like, Button dislike, ImageView avatar) {
-        this.id = id;
-        this.op = op;
-        this.post = post;
-        this.like = like;
-        this.dislike = dislike;
-        this.avatar = avatar;
-    }
-
-    public void setId(int id) { this.id = id; }
-    public int getId() { return id; }
-    public TextView getOp() { return op; }
-    public TextView getPost() { return post; }
-    public Button getLike() { return like; }
-    public Button getDislike() { return dislike; }
-    public ImageView getAvatar() { return avatar; }
 }
