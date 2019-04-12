@@ -57,22 +57,28 @@
                 >
                 <Button
                     android:id="@+id/likeButton"
+                    android:backgroundTint="@android:color/holo_green_dark"
                     android:layout_width="75sp"
                     android:layout_height="match_parent"
-                    android:text="Like"
-                    android:textColor="@color/colorPrimary"/>
+                    android:text="0"
+                    android:drawableLeft="@android:drawable/arrow_up_float"
+                    android:textColor="@android:color/white"/>
                 <Button
                     android:id="@+id/dislikeButton"
-                    android:layout_width="85sp"
+                    android:backgroundTint="@android:color/holo_red_dark"
+                    android:layout_width="75sp"
                     android:layout_height="match_parent"
-                    android:text="Dislike"
-                    android:textColor="@color/colorAccent"/>
+                    android:text="0"
+                    android:drawableLeft="@android:drawable/arrow_down_float"
+                    android:textColor="@android:color/white"/>
                 <Button
                     android:id="@+id/commentButton"
-                    android:layout_width="100sp"
+                    android:backgroundTint="@android:color/black"
+                    android:layout_width="75sp"
                     android:layout_height="match_parent"
-                    android:text="Comment"
-                    android:textColor="@color/design_default_color_primary_dark"/>
+                    android:text="0"
+                    android:drawableLeft="@android:drawable/stat_notify_chat"
+                    android:textColor="@android:color/white"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

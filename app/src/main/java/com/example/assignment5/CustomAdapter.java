@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 public class CustomAdapter extends BaseAdapter {
     private Context context;
+    private int ids[];
     private String username;
     private String ops[];
     private Button buttons[];
@@ -34,8 +35,9 @@ public class CustomAdapter extends BaseAdapter {
     private String avatars[];
     private LayoutInflater inflter;
 
-    CustomAdapter(Context applicationContext, String username, String[] ops,
+    CustomAdapter(Context applicationContext, int ids[], String username, String[] ops,
                          String[] posts, int[] types, int[] likes, int[] dislikes, String[] avatars) {
+        this.ids = ids;
         this.context = applicationContext;
         this.username = username;
         this.ops = ops;
@@ -48,8 +50,9 @@ public class CustomAdapter extends BaseAdapter {
         inflter = (LayoutInflater.from(applicationContext));
     }
 
-    void refresh(String[] ops, String[] posts, int[] types, int[] likes, int[] dislikes,
+    void refresh(int ids[], String[] ops, String[] posts, int[] types, int[] likes, int[] dislikes,
                         String[] avatars) {
+        this.ids = ids;
         this.ops = ops;
         this.posts = posts;
         this.likes = likes;
@@ -87,6 +90,32 @@ public class CustomAdapter extends BaseAdapter {
             Picasso.get().load(posts[i]).into(post);
         }
         final Button op = (Button) view.findViewById(R.id.op);
+        final Button like = (Button) view.findViewById(R.id.likeButton);
+        like.setText(String.valueOf(likes[i]));
+        like.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Reaction r = new Reaction(String.valueOf(ids[i]), "like");
+                Thread t = new Thread(r);
+                t.start();
+
+                like.setText(String.valueOf(Integer.parseInt((String) like.getText()) + 1));
+            }
+        });
+
+        final Button dislike = (Button) view.findViewById(R.id.dislikeButton);
+        dislike.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Reaction r = new Reaction(String.valueOf(ids[i]), "dislike");
+                Thread t = new Thread(r);
+                t.start();
+
+                dislike.setText(String.valueOf(Integer.parseInt((String) dislike.getText()) + 1));
+            }
+        });
+        dislike.setText(String.valueOf(dislikes[i]));
+        
         ImageView image = (ImageView) view.findViewById(R.id.image);
         op.setText(ops[i]);
         op.setOnClickListener(new View.OnClickListener(){

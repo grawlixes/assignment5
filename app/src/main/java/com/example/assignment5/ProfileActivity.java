@@ -87,6 +87,7 @@ public class ProfileActivity extends AppCompatActivity {
         Log.d("Waiting for posts", "p");
         ArrayList<Post> newPosts = ret.getResult();
         Log.d("DONE for posts", String.valueOf(newPosts.size()));
+        int[] ids = new int[newPosts.size()];
         String[] ops = new String[newPosts.size()];
         String[] posts = new String[newPosts.size()];
         int[] types = new int[newPosts.size()];
@@ -95,6 +96,7 @@ public class ProfileActivity extends AppCompatActivity {
         String[] avatars = new String[newPosts.size()];
 
         for (int i = 0; i < newPosts.size(); i++) {
+            ids[i] = newPosts.get(i).getId();
             ops[i] = (newPosts.get(i).getOp());
             types[i] = (newPosts.get(i).getType());
             posts[i] = (newPosts.get(i).getPost());
@@ -105,10 +107,10 @@ public class ProfileActivity extends AppCompatActivity {
 
         if (first) {
             lv = findViewById(R.id.postView);
-            ca = new CustomAdapter(getApplicationContext(), clicker, ops, posts, types, likes, dislikes, avatars);
+            ca = new CustomAdapter(getApplicationContext(), ids, clicker, ops, posts, types, likes, dislikes, avatars);
             lv.setAdapter(ca);
         } else {
-            ca.refresh(ops, posts, types, likes, dislikes, avatars);
+            ca.refresh(ids, ops, posts, types, likes, dislikes, avatars);
         }
     }
 

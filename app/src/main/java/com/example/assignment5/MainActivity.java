@@ -49,8 +49,6 @@ public class MainActivity extends AppCompatActivity {
                 int type = (post.length() < 4 || !(post.substring(post.length()-4).equals(".jpg") ||
                                                     post.substring(post.length()-4).equals(".png")))
                             ? 0 : 1;
-                Log.d("Type is", String.valueOf(type));
-                Log.d("Type back", post.substring(post.length()-4));
                 MakePost mp = new MakePost(username, postText.getText().toString(), type);
                 Thread t = new Thread(mp);
                 t.start();
@@ -81,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("Waiting for posts", "p");
         ArrayList<Post> newPosts = ret.getResult();
         Log.d("DONE for posts", String.valueOf(newPosts.size()));
+        int[] ids = new int[newPosts.size()];
         String[] ops = new String[newPosts.size()];
         String[] posts = new String[newPosts.size()];
         int[] types = new int[newPosts.size()];
@@ -89,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         String[] avatars = new String[newPosts.size()];
 
         for (int i = 0; i < newPosts.size(); i++) {
+            ids[i] = newPosts.get(i).getId();
             ops[i] = (newPosts.get(i).getOp());
             posts[i] = (newPosts.get(i).getPost());
             types[i] = (newPosts.get(i).getType());
@@ -99,10 +99,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (first) {
             lv = findViewById(R.id.postView);
-            ca = new CustomAdapter(getApplicationContext(), username, ops, posts, types, likes, dislikes, avatars);
+            ca = new CustomAdapter(getApplicationContext(), ids, username, ops, posts, types, likes, dislikes, avatars);
             lv.setAdapter(ca);
         } else {
-            ca.refresh(ops, posts, types, likes, dislikes, avatars);
+            ca.refresh(ids, ops, posts, types, likes, dislikes, avatars);
         }
     }
 
