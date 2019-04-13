@@ -14,4 +14,6 @@
     </string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_edit_profile">EditProfileActivity</string>
+    <string name="title_activity_discuss">DiscussActivity</string>
+    <string name="title_activity_comment">CommentActivity</string>
 </resources>

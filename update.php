@@ -1,7 +1,7 @@
 <?php 
 $username = $_POST["username"];
-$post = $_POST["post"];
-$type = $_POST["type"];
+$newAvatar = $_POST["newAvatar"];
+$newBio = $_POST["newBio"];
 
 # connecting
 $dbname = "kfranke1_assignment5";
@@ -11,7 +11,5 @@ $dbuser = "kfranke1";
 $host = "mysql.cs.binghamton.edu";
 $cid = mysqli_connect($host, $dbuser, $dbpassword, $dbname);
 
-$sql = "insert into posts (op, post, type) 
-    values ('" . $username . "', '" . addslashes($post) . "', " . $type. ");";
-echo $sql;
-$result = mysqli_query($cid, $sql);
+$sql = "update users set avatar='" . $newAvatar . "', bio='" . $newBio . "' where username='" . $username . "';";
+mysqli_query($cid, $sql);

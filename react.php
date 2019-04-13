@@ -1,6 +1,7 @@
 <?php 
 $id = $_POST["id"];
 $like = $_POST["reaction"];
+$isPost = $_POST["isPost"];
 
 # connecting
 $dbname = "kfranke1_assignment5";
@@ -15,6 +16,11 @@ if ($like == "n") {
     $reaction = "dislikes";
 }
 
-$sql = "update posts set " . $reaction . "=" . $reaction . "+1 where id=" . $id . ";";
+$table = "posts";
+if ($isPost == 0) {
+    $table = "comments";
+}
+
+$sql = "update " . $table . " set " . $reaction . "=" . $reaction . "+1 where id=" . $id . ";";
 echo $sql;
 $result = mysqli_query($cid, $sql);

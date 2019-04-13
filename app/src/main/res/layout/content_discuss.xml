@@ -5,27 +5,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".ProfileActivity"
-    tools:showIn="@layout/activity_profile">
+    tools:context=".DiscussActivity"
+    tools:showIn="@layout/activity_discuss">
 
     <LinearLayout
         android:layout_width="395dp"
-        android:layout_height="516dp"
+        android:layout_height="452dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="143dp"
+        android:layout_marginTop="192dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" >
 
         <ListView
             android:id="@+id/postView"
-            android:layout_width="fill_parent"
-            android:layout_height="520dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:divider="@color/colorPrimaryDark"
             android:dividerHeight="1dp" />
-
     </LinearLayout>
+
+    <Button
+        android:id="@+id/dislikeButton"
+        android:layout_width="75sp"
+        android:layout_height="44dp"
+        android:layout_marginStart="268dp"
+        android:layout_marginLeft="268dp"
+        android:layout_marginTop="140dp"
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:drawableLeft="@android:drawable/arrow_down_float"
+        android:text="0"
+        android:textColor="@android:color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/likeButton"
+        android:layout_width="75sp"
+        android:layout_height="43dp"
+        android:layout_marginStart="176dp"
+        android:layout_marginLeft="176dp"
+        android:layout_marginTop="140dp"
+        android:backgroundTint="@android:color/holo_green_dark"
+        android:drawableLeft="@android:drawable/arrow_up_float"
+        android:text="0"
+        android:textColor="@android:color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/avatar"
@@ -33,7 +60,7 @@
         android:layout_height="117dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/ic_launcher" />
@@ -52,13 +79,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/bio"
+        android:id="@+id/post"
         android:layout_width="250dp"
-        android:layout_height="68dp"
+        android:layout_height="63dp"
         android:layout_marginStart="142dp"
         android:layout_marginLeft="142dp"
         android:layout_marginTop="65dp"
-        android:text="Bio"
+        android:text="Post"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

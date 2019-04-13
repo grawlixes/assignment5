@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 String post = postText.getText().toString();
                 // Decide the type of post. If it's a png or jpg, it's an image; otherwise, it's not.
                 // Type 0 means regular post, type 1 means image post.
+                // Same goes for comments, FYI - but 2 means regular, and 3 means image instead.
                 int type = (post.length() < 4 || !(post.substring(post.length()-4).equals(".jpg") ||
                                                     post.substring(post.length()-4).equals(".png")))
                             ? 0 : 1;
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void react(int postId, String reaction) {
-        Reaction r = new Reaction(String.valueOf(postId), reaction);
+        Reaction r = new Reaction(String.valueOf(postId), reaction, "1");
         Thread rt = new Thread(r);
         rt.start();
     }
@@ -275,10 +276,12 @@ class RetrievePosts implements Runnable {
 class Reaction implements Runnable {
 
     private String postId;
+    // 1 if it's a post, 0 if it's a comment.
+    private String isPost;
     // True if you're liking, false if you're disliking.
     private boolean like;
 
-    Reaction(String postId, String reaction) {
+    Reaction(String postId, String reaction, String isPost) {
         if (reaction.equals("dislike")) {
             Log.d("Disliking", "d");
             like = false;
@@ -288,6 +291,7 @@ class Reaction implements Runnable {
         }
 
         this.postId = postId;
+        this.isPost = isPost;
     }
 
     public void run() {
@@ -302,7 +306,7 @@ class Reaction implements Runnable {
             connect.setDoOutput(true);
 
             OutputStream os = connect.getOutputStream();
-            String s = "id=" + postId + "&reaction=" + ((like ? "y" : "n"));
+            String s = "isPost=" + isPost + "&id=" + postId + "&reaction=" + ((like ? "y" : "n"));
             os.write(s.getBytes());
             os.close();
 

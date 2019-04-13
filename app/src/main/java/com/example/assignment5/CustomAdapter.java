@@ -80,7 +80,7 @@ public class CustomAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
-        if (types[i] == 0) {
+        if (types[i] % 2 == 0) {
             view = inflter.inflate(R.layout.activity_list_item, null);
             TextView post = (TextView) view.findViewById(R.id.post);
             post.setText(posts[i]);
@@ -90,12 +90,15 @@ public class CustomAdapter extends BaseAdapter {
             Picasso.get().load(posts[i]).into(post);
         }
         final Button op = (Button) view.findViewById(R.id.op);
+
         final Button like = (Button) view.findViewById(R.id.likeButton);
         like.setText(String.valueOf(likes[i]));
         like.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Reaction r = new Reaction(String.valueOf(ids[i]), "like");
+                String ty = "1";
+                if (types[i] > 1) ty = "0";
+                Reaction r = new Reaction(String.valueOf(ids[i]), "like", ty);
                 Thread t = new Thread(r);
                 t.start();
 
@@ -107,7 +110,9 @@ public class CustomAdapter extends BaseAdapter {
         dislike.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Reaction r = new Reaction(String.valueOf(ids[i]), "dislike");
+                String ty = "1";
+                if (types[i] > 1) ty = "0";
+                Reaction r = new Reaction(String.valueOf(ids[i]), "dislike", ty);
                 Thread t = new Thread(r);
                 t.start();
 
@@ -115,8 +120,29 @@ public class CustomAdapter extends BaseAdapter {
             }
         });
         dislike.setText(String.valueOf(dislikes[i]));
-        
-        ImageView image = (ImageView) view.findViewById(R.id.image);
+
+        final Button comment = (Button) view.findViewById(R.id.commentButton);
+        if (types[i] < 2) {
+            comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, DiscussActivity.class);
+                    intent.putExtra("username", username);
+                    intent.putExtra("id", String.valueOf(ids[i]));
+                    intent.putExtra("avatar", avatars[i]);
+                    intent.putExtra("op", ops[i]);
+                    intent.putExtra("post", posts[i]);
+                    intent.putExtra("likes", like.getText().toString());
+                    intent.putExtra("dislikes", dislike.getText().toString());
+
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
+            });
+        } else {
+            comment.setVisibility(View.INVISIBLE);
+        }
+
         op.setText(ops[i]);
         op.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -137,6 +163,7 @@ public class CustomAdapter extends BaseAdapter {
             }
         });
 
+        ImageView image = (ImageView) view.findViewById(R.id.image);
         // Module by Square which allows loading images on the fly. Useful!
         if (avatars[i].length() > 0) {
             Picasso.get().load(avatars[i]).into(image);

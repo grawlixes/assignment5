@@ -74,10 +74,9 @@
                 <Button
                     android:id="@+id/commentButton"
                     android:backgroundTint="@android:color/black"
-                    android:layout_width="75sp"
+                    android:layout_width="50sp"
                     android:layout_height="match_parent"
-                    android:text="0"
-                    android:drawableLeft="@android:drawable/stat_notify_chat"
+                    android:drawableBottom="@android:drawable/stat_notify_chat"
                     android:textColor="@android:color/white"/>
             </LinearLayout>
         </LinearLayout>
