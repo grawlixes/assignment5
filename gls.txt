@@ -1,3 +1,125 @@
+commit 8756ffe382c4a002fe2b91755ca9c4a7274767f2
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Fri Apr 12 23:33:51 2019 -0400
+
+    Done with everything I want. Added new php stuff.
+
+ app/src/main/AndroidManifest.xml                   |  10 +-
+ .../com/example/assignment5/CommentActivity.java   | 119 +++++++++
+ .../com/example/assignment5/CustomAdapter.java     |  37 ++-
+ .../com/example/assignment5/DiscussActivity.java   | 265 +++++++++++++++++++++
+ .../java/com/example/assignment5/MainActivity.java |  10 +-
+ app/src/main/res/layout/activity_comment.xml       |  34 +++
+ app/src/main/res/layout/activity_discuss.xml       |  34 +++
+ app/src/main/res/layout/activity_list_image.xml    |   5 +-
+ app/src/main/res/layout/activity_list_item.xml     |   5 +-
+ app/src/main/res/layout/content_comment.xml        |  35 +++
+ app/src/main/res/layout/content_discuss.xml        |  92 +++++++
+ app/src/main/res/layout/content_profile.xml        |   4 +-
+ app/src/main/res/values/strings.xml                |   2 +
+ bio.php                                            |  19 ++
+ comment.php                                        |  19 ++
+ post.php                                           |   5 +-
+ profile.php                                        |  53 +++++
+ react.php                                          |   8 +-
+ refresh.php                                        |  10 +-
+ refreshComments.php                                |  55 +++++
+ update.php                                         |  15 ++
+ 21 files changed, 815 insertions(+), 21 deletions(-)
+
+commit bc3b0ee80833ea8af5b6f9db8e794d56c4122983
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Thu Apr 11 21:50:10 2019 -0400
+
+    Listview and profile editing are better looking and convenient.
+
+ .../com/example/assignment5/CustomAdapter.java     | 33 ++++++++++++++++++++--
+ .../java/com/example/assignment5/MainActivity.java |  8 +++---
+ .../com/example/assignment5/ProfileActivity.java   |  6 ++--
+ app/src/main/res/layout/activity_list_image.xml    | 22 +++++++++------
+ app/src/main/res/layout/activity_list_item.xml     | 22 +++++++++------
+ 5 files changed, 67 insertions(+), 24 deletions(-)
+
+commit 8f0155aeca9b260ba5a090fcf00bf914dfc1f8de
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Thu Apr 11 15:05:18 2019 -0400
+
+    Image posts!
+
+ .../com/example/assignment5/CustomAdapter.java     | 20 ++++--
+ .../example/assignment5/EditProfileActivity.java   |  6 +-
+ .../java/com/example/assignment5/MainActivity.java | 74 ++++++++------------
+ .../com/example/assignment5/ProfileActivity.java   | 29 ++++++--
+ app/src/main/res/layout/activity_list_image.xml    | 79 ++++++++++++++++++++++
+ app/src/main/res/layout/activity_list_item.xml     |  2 +-
+ 6 files changed, 152 insertions(+), 58 deletions(-)
+
+commit 3002be85d8cf2739c825bffd278bf85fc96e6a8f
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Thu Apr 11 11:29:35 2019 -0400
+
+    Edit profile works, but is kind of inconvenient. May change
+
+ app/src/main/AndroidManifest.xml                   |  6 +-
+ .../example/assignment5/EditProfileActivity.java   | 98 ++++++++++++++++++++++
+ .../com/example/assignment5/ProfileActivity.java   |  9 +-
+ app/src/main/res/layout/activity_edit_profile.xml  | 34 ++++++++
+ app/src/main/res/layout/activity_list_item.xml     | 16 ++--
+ app/src/main/res/layout/content_edit_profile.xml   | 60 +++++++++++++
+ app/src/main/res/values/strings.xml                |  1 +
+ 7 files changed, 213 insertions(+), 11 deletions(-)
+
+commit 3d901687d995c3b423ec7bdccbe2cf8e1740ee95
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Thu Apr 11 01:27:15 2019 -0400
+
+    Profiles are almost done
+
+ app/src/main/AndroidManifest.xml                   |   6 +-
+ .../com/example/assignment5/CustomAdapter.java     |  94 +++++++++-
+ .../java/com/example/assignment5/MainActivity.java |  51 +-----
+ .../com/example/assignment5/ProfileActivity.java   | 199 +++++++++++++++++++++
+ app/src/main/res/layout/activity_list_item.xml     |  17 +-
+ app/src/main/res/layout/activity_profile.xml       |  34 ++++
+ app/src/main/res/layout/content_profile.xml        |  65 +++++++
+ app/src/main/res/values/strings.xml                |   1 +
+ 8 files changed, 411 insertions(+), 56 deletions(-)
+
+commit 68b87bf1fa40222aeca0f35dad5c09d3e01d6dc2
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Wed Apr 10 16:47:30 2019 -0400
+
+    Multiple posts and profile pictures work!
+
+ app/build.gradle                                   |   1 +
+ app/src/main/AndroidManifest.xml                   |   3 +-
+ .../com/example/assignment5/CustomAdapter.java     |  57 ++++++++----
+ .../java/com/example/assignment5/MainActivity.java | 103 +++++++++------------
+ app/src/main/res/layout/activity_list_item.xml     |  13 +--
+ 5 files changed, 90 insertions(+), 87 deletions(-)
+
+commit 9cdc53e39f030d458a9c47ce9530e0612dd876a1
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Tue Apr 9 22:45:50 2019 -0400
+
+    Listview looks ok, going to try to make it better
+
+ .../com/example/assignment5/CustomAdapter.java     |  56 ++++++++
+ .../java/com/example/assignment5/MainActivity.java |  21 ++-
+ app/src/main/res/drawable-v24/wack.png             | Bin 0 -> 199256 bytes
+ app/src/main/res/layout/activity_list_item.xml     |  76 ++++++++++
+ app/src/main/res/layout/content_main.xml           | 155 ++-------------------
+ 5 files changed, 166 insertions(+), 142 deletions(-)
+
+commit e80866c1df2c5fb65aaee438c8d08dd1f49a73da
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Fri Apr 5 22:56:44 2019 -0400
+
+    Git log stat
+
+ gls.txt | 232 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 232 insertions(+)
+
 commit 4fa78fbb0e40d7a5ac08378f5b45125c8fb847e2
 Author: Kyle Franke <kfranke1@binghamton.edu>
 Date:   Fri Apr 5 22:55:15 2019 -0400

@@ -1,8 +1,6 @@
 <?php
 $postId = $_POST["post_id"];
 
-$postId = 34; 
-
 # connecting
 $dbname = "kfranke1_assignment5";
 $dbpassword = "Imuabae6eita";
