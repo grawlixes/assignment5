@@ -1,3 +1,20 @@
+commit 9aab41d036433189aafd0b5dfc7d6f8f1f3845e9
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Sat Apr 13 01:31:47 2019 -0400
+
+    Finishing touches and screenshots.
+
+ Screenshot_1554519083.png                | Bin 94834 -> 0 bytes
+ Screenshot_1554519162.png                | Bin 120533 -> 0 bytes
+ Screenshot_1554519273.png                | Bin 139306 -> 0 bytes
+ Screenshot_1555133077.png                | Bin 0 -> 433843 bytes
+ Screenshot_1555133112.png                | Bin 0 -> 388062 bytes
+ Screenshot_1555133300.png                | Bin 0 -> 743449 bytes
+ app/src/main/res/layout/content_main.xml |   2 +-
+ gls.txt                                  | 122 +++++++++++++++++++++++++++++++
+ refreshComments.php                      |   2 -
+ 9 files changed, 123 insertions(+), 3 deletions(-)
+
 commit 8756ffe382c4a002fe2b91755ca9c4a7274767f2
 Author: Kyle Franke <kfranke1@binghamton.edu>
 Date:   Fri Apr 12 23:33:51 2019 -0400
